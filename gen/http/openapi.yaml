@@ -1,0 +1,74 @@
+swagger: "2.0"
+info:
+    title: Notification API
+    description: Notification API
+    version: "0.1"
+host: localhost:8000
+basePath: /
+consumes:
+    - application/json
+    - application/xml
+    - application/gob
+produces:
+    - application/json
+    - application/xml
+    - application/gob
+paths:
+    /messages:
+        post:
+            tags:
+                - messages
+            summary: send messages
+            operationId: messages#send
+            parameters:
+                - name: SendRequestBody
+                  in: body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/MessagesSendRequestBody'
+                    required:
+                        - message
+            responses:
+                "201":
+                    description: Created response.
+            schemes:
+                - http
+    /messages/subscribe:
+        get:
+            tags:
+                - messages
+            summary: subscribe messages
+            description: Subscribe to events sent such new chat messages.
+            operationId: messages#subscribe
+            responses:
+                "101":
+                    description: Switching Protocols response.
+                    schema:
+                        $ref: '#/definitions/MessagesSubscribeResponseBody'
+                        required:
+                            - message
+            schemes:
+                - ws
+definitions:
+    MessagesSendRequestBody:
+        title: MessagesSendRequestBody
+        type: object
+        properties:
+            message:
+                type: string
+                example: Qui laborum eligendi amet eos.
+        example:
+            message: Illo reiciendis aliquam cupiditate.
+        required:
+            - message
+    MessagesSubscribeResponseBody:
+        title: MessagesSubscribeResponseBody
+        type: object
+        properties:
+            message:
+                type: string
+                example: Officia dolor.
+        example:
+            message: Molestiae maxime sit voluptates.
+        required:
+            - message

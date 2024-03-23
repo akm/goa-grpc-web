@@ -1,0 +1,34 @@
+// Code generated with goa v3.15.2, DO NOT EDIT.
+//
+// messages protocol buffer definition
+//
+// Command:
+// $ goa gen goa-grpc-web/design
+
+syntax = "proto3";
+
+package messages;
+
+option go_package = "/messagespb";
+
+// Service is the messages service interface.
+service Messages {
+	// Send implements send.
+	rpc Send (SendRequest) returns (SendResponse);
+	// Subscribe to events sent such new chat messages.
+	rpc Subscribe (SubscribeRequest) returns (stream SubscribeResponse);
+}
+
+message SendRequest {
+	string message_ = 1;
+}
+
+message SendResponse {
+}
+
+message SubscribeRequest {
+}
+
+message SubscribeResponse {
+	string message_ = 1;
+}
