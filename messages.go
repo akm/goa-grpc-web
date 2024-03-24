@@ -22,7 +22,7 @@ var messageChannels = []chan messages.Message{}
 
 // Send implements send.
 func (s *messagessrvc) Send(ctx context.Context, p *messages.Message) (err error) {
-	s.logger.Print("messages.send")
+	s.logger.Printf("messages.send got %+v\n", *p)
 
 	go func() {
 		for _, ch := range messageChannels {
@@ -61,12 +61,18 @@ func (s *messagessrvc) Subscribe(ctx context.Context, stream messages.SubscribeS
 	interval := 500 * time.Millisecond
 	ticker := time.NewTicker(interval)
 
+	s.logger.Printf("Start streaming messages")
+
 	done := false
 	for {
 		select {
 		case <-ctx.Done():
+			s.logger.Printf("Receive ctx.Done()")
+
 			done = true
 		case <-ticker.C:
+			s.logger.Printf("Receive ticker.C")
+
 			msg := <-ch
 
 			if err := stream.Send(&msg); err != nil {
@@ -74,6 +80,7 @@ func (s *messagessrvc) Subscribe(ctx context.Context, stream messages.SubscribeS
 			}
 		}
 		if done {
+			s.logger.Printf("done is true so break")
 			break
 		}
 	}
